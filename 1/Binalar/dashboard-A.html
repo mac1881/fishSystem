@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ana Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+
+        .button-container {
+            margin: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ana Dashboard</h1>
+    <div class="button-container">
+        <button onclick="goToBinaSecimi()">Veri Ekle</button>
+    </div>
+    <div class="dashboard">
+        <div class="card">
+            <h3>Başlangıç Adet</h3>
+            <p id="baslangicAdet">0</p>
+        </div>
+        <div class="card">
+            <h3>Başlangıç Gramaj</h3>
+            <p id="baslangicGramaj">0</p>
+        </div>
+        <div class="card">
+            <h3>Baslangıç Biomas (kg)</h3>
+            <p id="baslangicBiomas">0</p>
+        </div>
+        <div class="card">
+            <h3>Şuandaki Adet</h3>
+            <p id="suandakiAdet">0</p>
+        </div>
+        <div class="card">
+            <h3>Ay Başı Gramaj</h3>
+            <p id="ayBasiGramaj">0</p>
+        </div>
+        <div class="card">
+            <h3>Şuanki Tahmini Gramaj</h3>
+            <p id="suankiTahminiGramaj">0</p>
+        </div>
+        <div class="card">
+            <h3>Şuanki Biomas (kg)</h3>
+            <p id="suankiBiomas">0</p>
+        </div>
+        <div class="card">
+            <h3>Bugünkü Ölü Adet</h3>
+            <p id="bugunOluAdet">0</p>
+        </div>
+        <div class="card">
+            <h3>Toplam Ölü Adet</h3>
+            <p id="toplamOluAdet">0</p>
+        </div>
+        <div class="card">
+            <h3>Bugünkü Yem (kg)</h3>
+            <p id="bugunYem">0</p>
+        </div>
+        <div class="card">
+            <h3>Bu Ayki Yem (kg)</h3>
+            <p id="buAykiYem">0</p>
+        </div>
+        <div class="card">
+            <h3>Günlük Yem Yüzde</h3>
+            <p id="gunlukYemYuzde">0%</p>
+        </div>
+        <div class="card">
+            <h3>Bu Ay Yem Yüzde</h3>
+            <p id="buAyYemYuzde">0%</p>
+        </div>
+        <div class="card">
+            <h3>Toplam Yem (kg)</h3>
+            <p id="toplamYem">0</p>
+        </div>
+        <div class="card">
+            <h3>Ölü Biyomas (kg)</h3>
+            <p id="oluBiyomas">0</p>
+        </div>
+        <div class="card">
+            <h3>Tahmini Gün Gramaj</h3>
+            <p id="tahminiGun">0</p>
+        </div>
+        <div class="card">
+            <h3>FCR Aylık</h3>
+            <p id="fcr">0</p>
+        </div>
+        <div class="card">
+            <h3>Adet % Fire</h3>
+            <p id="fire">0%</p>
+        </div>
+    </div>
+
+    <script>
+        // "Veri Ekle" butonuna tıklanınca "Bina Seçimi" sayfasına yönlendir
+        function goToBinaSecimi() {
+            window.location.href = 'bina-secimi.html';
+        }
+
+        // LocalStorage'daki verileri al ve dashboard'u doldur
+        function loadDashboardData() {
+            // LocalStorage'dan bina A, B, C, D ve E verilerini al
+            const binaAData = JSON.parse(localStorage.getItem('dataListA')) || [];
+            const binaBData = JSON.parse(localStorage.getItem('dataListB')) || [];
+            const binaCData = JSON.parse(localStorage.getItem('dataListC')) || [];
+            const binaDData = JSON.parse(localStorage.getItem('dataListD')) || [];
+            const binaEData = JSON.parse(localStorage.getItem('dataListE')) || [];
+
+            // Bütün bina verilerini birleştir
+            const allData = [...binaAData, ...binaBData, ...binaCData, ...binaDData, ...binaEData];
+
+            // Verilerin toplamını hesapla
+            let baslangicAdet = 0;
+            let baslangicGramaj = 0;
+            let baslangicBiomas = 0;
+            let suandakiAdet = 0;
+            let suankiTahminiGramaj = 0;
+            let suankiBiomas = 0;
+            let bugunOluAdet = 0;
+            let toplamOluAdet = 0;
+            let bugunYem = 0;
+            let buAykiYem = 0;
+            let toplamYem = 0;
+            let olulenBiyomas = 0;
+            let toplamFCR = 0;
+            let toplamFire = 0;
+
+            // Her bina için verileri toplar
+            allData.forEach(data => {
+                baslangicAdet += parseInt(data.baslangicAdet || 0);
+                baslangicGramaj += parseFloat(data.baslangicGramaj || 0);
+                baslangicBiomas += parseFloat(data.baslangicBiomas || 0);
+                suandakiAdet += parseInt(data.suankiAdet || 0);
+                suankiTahminiGramaj += parseFloat(data.suankiTahminiGramaj || 0);
+                suankiBiomas += parseFloat(data.suankiBiomas || 0);
+                bugunOluAdet += parseInt(data.olum || 0);
+                toplamOluAdet += parseInt(data.toplamOlum || 0);
+                bugunYem += parseFloat(data.gunlukYem || 0);
+                buAykiYem += parseFloat(data.gunlukYem || 0); // Aylık yem verisi günlük veriler üzerinden hesaplanabilir
+                toplamYem += parseFloat(data.toplamYem || 0);
+                olulenBiyomas += parseFloat(data.suankiBiomas || 0) - parseFloat(data.baslangicBiomas || 0);
+                toplamFCR += parseFloat(data.fcr || 0);
+                toplamFire += parseFloat(data.fire || 0);
+            });
+
+            // Hesaplanan verileri dashboard'a yerleştir
+            document.getElementById('baslangicAdet').textContent = baslangicAdet;
+            document.getElementById('baslangicGramaj').textContent = baslangicGramaj.toFixed(2);
+            document.getElementById('baslangicBiomas').textContent = baslangicBiomas.toFixed(2);
+            document.getElementById('suandakiAdet').textContent = suandakiAdet;
+            document.getElementById('suankiTahminiGramaj').textContent = suankiTahminiGramaj.toFixed(2);
+            document.getElementById('suankiBiomas').textContent = suankiBiomas.toFixed(2);
+            document.getElementById('bugunOluAdet').textContent = bugunOluAdet;
+            document.getElementById('toplamOluAdet').textContent = toplamOluAdet;
+            document.getElementById('bugunYem').textContent = bugunYem.toFixed(2);
+            document.getElementById('buAykiYem').textContent = buAykiYem.toFixed(2);
+            document.getElementById('toplamYem').textContent = toplamYem.toFixed(2);
+            document.getElementById('oluBiyomas').textContent = olulenBiyomas.toFixed(2);
+            document.getElementById('fcr').textContent = (toplamFCR / allData.length).toFixed(2);
+            document.getElementById('fire').textContent = (toplamFire / allData.length).toFixed(2) + '%';
+        }
+
+        // Sayfa yüklendiğinde verileri yükle
+        window.onload = loadDashboardData;
+    </script>
+</body>
+</html>

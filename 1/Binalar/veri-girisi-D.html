@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bina D Veri Girişi</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-image: url('baliklar3.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #2e8b57;
+            border-bottom: 2px solid #2e8b57;
+            padding-bottom: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #2e8b57;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #246b44;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #2e8b57;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(242, 242, 242, 0.8);
+        }
+
+        tr:hover {
+            background-color: rgba(224, 247, 250, 0.8);
+        }
+
+        .button-container {
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Bina D Veri Girişi</h2>
+    <form id="dataForm">
+        <label for="kafesSecimi">Kafes Seçimi:</label>
+        <select id="kafesSecimi" required></select>
+
+        <label for="olum">Günlük Ölüm:</label>
+        <input type="number" id="olum" required>
+
+        <label for="toplamOlum">Toplam Ölüm:</label>
+        <input type="number" id="toplamOlum" required>
+
+        <label for="baslangicAdet">Başlangıç Adet:</label>
+        <input type="number" id="baslangicAdet" required>
+
+        <label for="baslangicGramaj">Başlangıç Gramaj (kg):</label>
+        <input type="number" id="baslangicGramaj" step="0.01" required>
+
+        <label for="suankiAdet">Şuanki Adet:</label>
+        <input type="number" id="suankiAdet" required>
+
+        <label for="suankiTahminiGramaj">Şuanki Tahmini Gramaj (kg):</label>
+        <input type="number" id="suankiTahminiGramaj" step="0.01" required>
+
+        <label for="gunlukYem">Günlük Yem (kg):</label>
+        <input type="number" id="gunlukYem" required>
+
+        <label for="oksijen">Oksijen (mg/L):</label>
+        <input type="number" id="oksijen" placeholder="Örn: 8" step="0.01" required>
+
+        <label for="sicaklik">Sıcaklık (°C):</label>
+        <input type="number" id="sicaklik" placeholder="Örn: 20" step="0.1" required>
+
+        <button type="submit">Veri Ekle</button>
+    </form>
+
+    <h2>Kafes Yönetimi</h2>
+    <input type="text" id="kafesAdi" placeholder="Yeni Kafes Adı">
+    <button onclick="addCage()">Kafes Ekle</button>
+    <button onclick="deleteCage()">Kafes Sil</button><br><br>
+    
+    <h2>Veri Listesi</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Kafes</th>
+                <th>Ay</th>
+                <th>Günlük Ölüm</th>
+                <th>Toplam Ölüm</th>
+                <th>Başlangıç Adet</th>
+                <th>Başlangıç Gramaj (kg)</th>
+                <th>Başlangıç Biomas (kg)</th>
+                <th>Şuanki Adet</th>
+                <th>Şuanki Tahmini Gramaj (kg)</th>
+                <th>Günlük Yem (kg)</th>
+                <th>Oksijen (mg/L)</th>
+                <th>Sıcaklık (°C)</th>
+                <th>Şuanki Biomas (kg)</th>
+                <th>AL.GR</th>
+                <th>Adet (%) FİRE</th> 
+                <th>Toplam Yem (kg)</th>
+                <th>FCR</th>
+                <th>Tarih ve Saat</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody id="dataTableBody"></tbody>
+    </table>
+
+    <div class="button-container">
+        <button onclick="navigateData(-1)">Geri</button>
+        <button onclick="navigateData(1)">İleri</button>
+    </div>
+
+    <div class="button-container">
+        <button onclick="goToEditPage()">Verileri Düzenle</button>
+        <button onclick="goBack()">Bina Seçimine Dön</button>
+    </div>
+
+    <script>
+        let currentStartIndex = 0;
+        const viewWindowSize = 30;
+
+        window.onload = function() {
+            loadCages();
+            loadStoredData();
+        };
+
+        function loadStoredData() {
+            const storedData = JSON.parse(localStorage.getItem('dataListD')) || [];
+            const tableBody = document.getElementById('dataTableBody');
+            tableBody.innerHTML = '';
+
+            const viewData = storedData.slice(currentStartIndex, currentStartIndex + viewWindowSize);
+            viewData.forEach((data, index) => {
+                addRowToTable(data, index);
+            });
+        }
+
+        function navigateData(direction) {
+            const storedData = JSON.parse(localStorage.getItem('dataListD')) || [];
+            const maxIndex = Math.max(storedData.length - viewWindowSize, 0);
+
+            currentStartIndex += direction * viewWindowSize;
+
+            if (currentStartIndex < 0) {
+                currentStartIndex = 0;
+            } else if (currentStartIndex > maxIndex) {
+                currentStartIndex = maxIndex;
+            }
+
+            loadStoredData();
+        }
+
+        document.getElementById('dataForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            const kafes = document.getElementById('kafesSecimi').value;
+            const olum = parseInt(document.getElementById('olum').value);
+            const toplamOlum = parseInt(document.getElementById('toplamOlum').value);
+            const baslangicAdet = parseInt(document.getElementById('baslangicAdet').value);
+            const baslangicGramaj = parseFloat(document.getElementById('baslangicGramaj').value);
+            const suankiAdet = parseInt(document.getElementById('suankiAdet').value);
+            const suankiTahminiGramaj = parseFloat(document.getElementById('suankiTahminiGramaj').value);
+            const gunlukYem = parseFloat(document.getElementById('gunlukYem').value);
+            const oksijen = parseFloat(document.getElementById('oksijen').value);
+            const sicaklik = parseFloat(document.getElementById('sicaklik').value);
+
+            const FCR = 1.2; 
+            const suankiBiomas = (suankiAdet * suankiTahminiGramaj / 1000).toFixed(2); 
+            const baslangicBiomas = (baslangicAdet * baslangicGramaj / 1000).toFixed(2); 
+            const ALGR = (suankiTahminiGramaj - baslangicGramaj).toFixed(2); 
+
+            let storedData = JSON.parse(localStorage.getItem('dataListD')) || [];
+            const totalYem = (storedData.reduce((total, item) => total + parseFloat(item.gunlukYem), 0) + gunlukYem).toFixed(2); 
+            const FCRValue = (totalYem / (suankiBiomas - baslangicBiomas)).toFixed(2); 
+
+            let adetFire = 0;
+            if (toplamOlum > 0) {
+                adetFire = ((toplamOlum / baslangicAdet) * 100).toFixed(2);
+            }
+
+            const currentDateTime = new Date();
+            const formattedDateTime = currentDateTime.toLocaleString('tr-TR', { 
+                dateStyle: 'short', 
+                timeStyle: 'short' 
+            });
+            const ay = currentDateTime.toLocaleString('tr-TR', { month: 'long' });
+
+            const newData = {
+                kafes,
+                ay,
+                olum,
+                toplamOlum,
+                baslangicAdet,
+                baslangicGramaj,
+                baslangicBiomas,
+                suankiAdet,
+                suankiTahminiGramaj,
+                gunlukYem,
+                oksijen,
+                sicaklik,
+                suankiBiomas,
+                ALGR, 
+                adetFire, 
+                totalYem, 
+                FCR: FCRValue,
+                tarihSaat: formattedDateTime
+            };
+
+            storedData.push(newData);
+            localStorage.setItem('dataListD', JSON.stringify(storedData));
+
+            document.getElementById('dataTableBody').innerHTML = '';
+            loadStoredData();
+
+            document.getElementById('dataForm').reset();
+        };
+
+        function addRowToTable(data, index) {
+            const tableBody = document.getElementById('dataTableBody');
+            const newRow = tableBody.insertRow();
+
+            newRow.innerHTML = `
+                <td>${data.kafes}</td>
+                <td>${data.ay}</td>
+                <td>${data.olum}</td>
+                <td>${data.toplamOlum}</td>
+                <td>${data.baslangicAdet}</td>
+                <td>${data.baslangicGramaj} kg</td>
+                <td>${data.baslangicBiomas} kg</td>
+                <td>${data.suankiAdet}</td>
+                <td>${data.suankiTahminiGramaj} kg</td>
+                <td>${data.gunlukYem} kg</td>
+                <td>${data.oksijen} mg/L</td>
+                <td>${data.sicaklik} °C</td>
+                <td>${data.suankiBiomas} kg</td>
+                <td>${data.ALGR} kg</td> 
+                <td>${data.adetFire} %</td> 
+                <td>${data.totalYem} kg</td> 
+                <td>${data.FCR}</td> 
+                <td>${data.tarihSaat}</td>
+                <td><button onclick="deleteRow(${index})">Sil</button></td>
+            `;
+        }
+
+        function deleteRow(index) {
+            let storedData = JSON.parse(localStorage.getItem('dataListD')) || [];
+            storedData.splice(index, 1);
+            localStorage.setItem('dataListD', JSON.stringify(storedData));
+            loadStoredData();
+        }
+
+        function addCage() {
+            const kafesAdi = document.getElementById('kafesAdi').value.trim();
+            if (kafesAdi !== '') {
+                let kafesler = JSON.parse(localStorage.getItem('cageListD')) || [];
+                kafesler.push(kafesAdi);
+                localStorage.setItem('cageListD', JSON.stringify(kafesler));
+                loadCages();
+                document.getElementById('kafesAdi').value = '';
+            }
+        }
+
+        function deleteCage() {
+            const kafes = document.getElementById('kafesSecimi').value;
+            let kafesler = JSON.parse(localStorage.getItem('cageListD')) || [];
+            kafesler = kafesler.filter(k => k !== kafes);
+            localStorage.setItem('cageListD', JSON.stringify(kafesler));
+            loadCages();
+        }
+
+        function loadCages() {
+            const kafesler = JSON.parse(localStorage.getItem('cageListD')) || [];
+            const kafesSecimi = document.getElementById('kafesSecimi');
+            kafesSecimi.innerHTML = '';
+
+            kafesler.forEach(kafes => {
+                const option = document.createElement('option');
+                option.value = kafes;
+                option.text = kafes;
+                kafesSecimi.appendChild(option);
+            });
+        }
+
+        function goToEditPage() {
+            window.location.href = 'duzenle-D.html';
+        }
+
+        function goBack() {
+            window.location.href = 'bina-secimi.html';
+        }
+
+    </script>
+</body>
+</html>
